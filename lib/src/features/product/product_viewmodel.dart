@@ -7,7 +7,7 @@ class ProductViewModel extends ChangeNotifier {
 
   List<ProductModel> _allProducts = [];
   List<ProductModel> _filteredProducts = [];
-  
+
   bool _isLoading = false;
   String _currentCategory = 'Todos';
 
@@ -16,10 +16,12 @@ class ProductViewModel extends ChangeNotifier {
   List<ProductModel> get products => _filteredProducts;
   bool get isLoading => _isLoading;
   String get currentCategory => _currentCategory;
-  
+
   List<String> get categories {
     final cats = _allProducts.map((p) => p.category).toSet().toList();
     cats.insert(0, 'Todos');
+    bool hasFavorites = _allProducts.any((p) => p.isFavorite);
+    if (hasFavorites) cats.insert(1, 'Favoritos');
     return cats;
   }
 
@@ -72,6 +74,8 @@ class ProductViewModel extends ChangeNotifier {
   void _applyFilters() {
     if (_currentCategory == 'Todos') {
       _filteredProducts = List.from(_allProducts);
+    } else if (_currentCategory == 'Favoritos') {
+      _filteredProducts = _allProducts.where((p) => p.isFavorite).toList();
     } else {
       _filteredProducts = _allProducts.where((p) => p.category == _currentCategory).toList();
     }

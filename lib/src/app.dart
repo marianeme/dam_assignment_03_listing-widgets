@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vendas_app/src/application/ui/ui_config.dart';
 
 import 'dependencies.dart';
 import 'features/client/client_list_page.dart';
@@ -21,10 +22,9 @@ class App extends StatelessWidget {
       providers: appProviders,
       child: MaterialApp(
         title: 'Vendas App',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
-        ),
+        themeMode: ThemeMode.light,
+        theme: UiConfig.lightTheme,
+        darkTheme: UiConfig.darkTheme,
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
@@ -36,7 +36,25 @@ class App extends StatelessWidget {
           '/categories': (context) => const CategoryListPage(),
           '/orders': (context) => const OrderListPage(),
           '/orders/detail': (context) => const OrderDetailPage(),
-          '/cart': (context) => const CartPage(),
+        },
+        onGenerateRoute: (settings) {
+          if (settings.name == '/cart') {
+            return PageRouteBuilder(
+              settings: settings,
+              pageBuilder: (context, animation, secondaryAnimation) => const CartPage(),
+              transitionDuration: const Duration(milliseconds: 300),
+              reverseTransitionDuration: const Duration(milliseconds: 250),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                final curvedAnimation = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+                return SlideTransition(
+                  position: Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero).animate(curvedAnimation),
+                  child: child,
+                );
+              },
+            );
+          }
+
+          return null;
         },
       ),
     );

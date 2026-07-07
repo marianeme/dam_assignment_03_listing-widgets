@@ -86,6 +86,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
+  flutter_staggered_animations_plus:
+    dependency: "direct main"
+    description:
+      name: flutter_staggered_animations_plus
+      sha256: "9b882da72a5f3b49f4d6bbc826db15f4e5af01feaabd7990c0bf7c7ee355368b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
