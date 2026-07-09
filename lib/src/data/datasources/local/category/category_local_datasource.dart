@@ -5,4 +5,5 @@ abstract class CategoryLocalDatasource {
   Future<void> add(CategoryModel category);
   Future<void> update(CategoryModel category);
   Future<void> delete(String id);
+  Stream<List<CategoryModel>> watchAll();
 }

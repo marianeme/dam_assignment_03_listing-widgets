@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       drawer: const CustomDrawer(),
       appBar: AppBar(
         centerTitle: true,
+        title: const Text('Vendas App'),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),

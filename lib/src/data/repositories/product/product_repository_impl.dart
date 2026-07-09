@@ -26,4 +26,9 @@ class ProductRepositoryImpl implements ProductRepository {
   Future<void> delete(String id) {
     return _localDatasource.delete(id);
   }
+
+  @override
+  Stream<List<ProductModel>> watchAll() {
+    return _localDatasource.watchAll();
+  }
 }

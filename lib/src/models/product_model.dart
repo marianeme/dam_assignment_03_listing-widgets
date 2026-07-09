@@ -34,4 +34,26 @@ class ProductModel {
       isFavorite: isFavorite ?? this.isFavorite,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'imageUrl': imageUrl,
+      'category': category,
+      'isFavorite': isFavorite,
+    };
+  }
+
+  factory ProductModel.fromMap(Map<String, dynamic> map) {
+    return ProductModel(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      price: map['price']?.toDouble() ?? 0.0,
+      imageUrl: map['imageUrl'] ?? '',
+      category: map['category'] ?? 'Geral',
+      isFavorite: map['isFavorite'] ?? false,
+    );
+  }
 }

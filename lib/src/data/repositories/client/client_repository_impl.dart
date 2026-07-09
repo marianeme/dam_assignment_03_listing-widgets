@@ -26,4 +26,9 @@ class ClientRepositoryImpl implements ClientRepository {
   Future<void> delete(String id) {
     return _localDatasource.delete(id);
   }
+
+  @override
+  Stream<List<ClientModel>> watchAll() {
+    return _localDatasource.watchAll();
+  }
 }

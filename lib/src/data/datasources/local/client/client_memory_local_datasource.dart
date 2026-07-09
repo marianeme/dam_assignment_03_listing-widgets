@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'package:vendas_app/src/models/client_model.dart';
 import 'client_local_datasource.dart';
 
 class ClientMemoryLocalDatasource implements ClientLocalDatasource {
   final List<ClientModel> _items = [];
+  final _controller = StreamController<List<ClientModel>>.broadcast();
 
   ClientMemoryLocalDatasource() {
     _items.addAll([
@@ -25,8 +27,15 @@ class ClientMemoryLocalDatasource implements ClientLocalDatasource {
   }
 
   @override
+  Stream<List<ClientModel>> watchAll() {
+    Future.microtask(() => _controller.add(List.unmodifiable(_items)));
+    return _controller.stream;
+  }
+
+  @override
   Future<void> add(ClientModel client) async {
     _items.add(client);
+    _controller.add(List.unmodifiable(_items));
   }
 
   @override
@@ -34,11 +43,13 @@ class ClientMemoryLocalDatasource implements ClientLocalDatasource {
     final index = _items.indexWhere((c) => c.id == client.id);
     if (index != -1) {
       _items[index] = client;
+      _controller.add(List.unmodifiable(_items));
     }
   }
 
   @override
   Future<void> delete(String id) async {
     _items.removeWhere((c) => c.id == id);
+    _controller.add(List.unmodifiable(_items));
   }
 }

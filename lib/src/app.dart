@@ -20,7 +20,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: appProviders,
+      providers: AppDependencies.providers,
       child: Consumer<SettingsViewModel>(
         builder: (context, settingsViewModel, child) {
           return MaterialApp(

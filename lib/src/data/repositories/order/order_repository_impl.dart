@@ -26,4 +26,9 @@ class OrderRepositoryImpl implements OrderRepository {
   Future<void> delete(String id) {
     return _localDatasource.delete(id);
   }
+
+  @override
+  Stream<List<OrderModel>> watchAll() {
+    return _localDatasource.watchAll();
+  }
 }

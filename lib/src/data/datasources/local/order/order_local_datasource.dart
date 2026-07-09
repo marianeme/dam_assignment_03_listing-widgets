@@ -5,4 +5,5 @@ abstract class OrderLocalDatasource {
   Future<void> add(OrderModel order);
   Future<void> update(OrderModel order);
   Future<void> delete(String id);
+  Stream<List<OrderModel>> watchAll();
 }

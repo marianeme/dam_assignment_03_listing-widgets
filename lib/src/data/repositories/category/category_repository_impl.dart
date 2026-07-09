@@ -18,4 +18,9 @@ class CategoryRepositoryImpl implements CategoryRepository {
 
   @override
   Future<void> delete(String id) => _datasource.delete(id);
+
+  @override
+  Stream<List<CategoryModel>> watchAll() {
+    return _datasource.watchAll();
+  }
 }

@@ -5,4 +5,5 @@ abstract class ProductRepository {
   Future<void> add(ProductModel product);
   Future<void> update(ProductModel product);
   Future<void> delete(String id);
+  Stream<List<ProductModel>> watchAll();
 }
