@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vendas_app/src/models/order_model.dart';
 
+import '../../application/helpers/currency_helper.dart';
+
 class OrderDetailPage extends StatelessWidget {
   const OrderDetailPage({super.key});
 
@@ -34,22 +36,35 @@ class OrderDetailPage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Expanded(
-              child: ListView.builder(
-                itemCount: order.items.length,
-                itemBuilder: (context, index) {
-                  final item = order.items[index];
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(item.product.name),
-                    subtitle: Text(
-                      '${item.quantity}x R\$ ${item.product.price.toStringAsFixed(2)}',
-                    ),
-                    trailing: Text(
-                      'R\$ ${item.total.toStringAsFixed(2)}',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  );
-                },
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    columnSpacing: 20.0,
+                    columns: const [
+                      DataColumn(label: Text('Produto')),
+                      DataColumn(label: Text('Qtd'), numeric: true),
+                      DataColumn(label: Text('Preço Unitário'), numeric: true),
+                      DataColumn(label: Text('Subtotal'), numeric: true),
+                    ],
+                    rows: order.items.map((item) {
+                      return DataRow(
+                        cells: [
+                          DataCell(Text(item.product.name)),
+                          DataCell(Text('${item.quantity}')),
+                          DataCell(Text(CurrencyHelper.format(item.product.price))),
+                          DataCell(
+                            Text(
+                              CurrencyHelper.format(item.total),
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             ),
             const Divider(),
