@@ -15,7 +15,10 @@ class ProductListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Produtos'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme
+            .of(context)
+            .colorScheme
+            .inversePrimary,
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -31,7 +34,8 @@ class ProductListPage extends StatelessWidget {
             height: 60,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0, vertical: 8.0),
               itemCount: productViewModel.categories.length,
               itemBuilder: (context, index) {
                 final category = productViewModel.categories[index];
@@ -49,55 +53,86 @@ class ProductListPage extends StatelessWidget {
               },
             ),
           ),
-          // Lista de Produtos
           Expanded(
             child: productViewModel.products.isEmpty
                 ? const Center(child: Text('Nenhum produto cadastrado.'))
-                : ListView.builder(
-                    itemCount: productViewModel.products.length,
-                    itemBuilder: (context, index) {
-                      final product = productViewModel.products[index];
-                      return ListTile(
-                        leading: SizedBox(
-                          width: 50,
-                          height: 50,
+                : GridView.builder(
+              padding: const EdgeInsets.all(8.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12.0,
+                crossAxisSpacing: 12.0,
+                childAspectRatio: 0.75,
+              ),
+              itemCount: productViewModel.products.length,
+              itemBuilder: (context, index) {
+                final product = productViewModel.products[index];
+                return Card(
+                  clipBehavior: Clip.antiAlias,
+                  elevation: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          color: Colors.grey[200],
+                          width: double.infinity,
                           child: product.imageUrl.isNotEmpty
                               ? Image.network(
-                                  product.imageUrl,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(Icons.broken_image, size: 40),
-                                )
-                              : const Icon(Icons.image, size: 40),
+                            product.imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                            const Center(child: Icon(Icons.broken_image, size: 40, color: Colors.grey)),
+                          )
+                              : const Center(child: Icon(Icons.image, size: 40, color: Colors.grey)),
                         ),
-                        title: Text(product.name),
-                        subtitle: Text(
-                          'R\$ ${product.price.toStringAsFixed(2)} | ${product.category}',
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
+                        child: Text(
+                          product.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                product.isFavorite
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: product.isFavorite ? Colors.red : null,
-                              ),
-                              onPressed: () =>
-                                  productViewModel.toggleFavorite(product.id),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          'R\$ ${product.price.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            color: Colors.grey[700],
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              product.isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: product.isFavorite ? Colors.red : null,
                             ),
-                            IconButton(
-                              icon: const Icon(Icons.add_shopping_cart, color: Colors.blue),
-                              onPressed: () {
-                                cartViewModel.addToCart(product);
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                            tooltip: 'Adicionar aos favoritos',
+                            onPressed: () => productViewModel.toggleFavorite(product.id),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add_shopping_cart, color: Colors.blue),
+                            tooltip: 'Adicionar ao carrinho de compras',
+                            onPressed: () {
+                              cartViewModel.addToCart(product);
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
+                );
+              },
+            ),
           ),
         ],
       ),
