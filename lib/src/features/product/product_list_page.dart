@@ -21,6 +21,13 @@ class ProductListPage extends StatelessWidget {
             .inversePrimary,
         actions: [
           IconButton(
+            icon: const Icon(Icons.sort),
+            tooltip: 'Ordenar produtos',
+            onPressed: () {
+              _showSortDialog(context, productViewModel);
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.add),
             onPressed: () => Navigator.pushNamed(context, '/products/form'),
             tooltip: 'Adicionar Produto',
@@ -137,6 +144,46 @@ class ProductListPage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: const CartBottomBanner(),
+    );
+  }
+  void _showSortDialog(BuildContext context, ProductViewModel viewModel) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Ordenar por:'),
+          children: [
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context);
+                viewModel.sortByName(ascending: true);
+              },
+              child: const Text('Nome (A-Z)'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context);
+                viewModel.sortByName(ascending: false);
+              },
+              child: const Text('Nome (Z-A)'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context);
+                viewModel.sortByPrice(ascending: true);
+              },
+              child: const Text('Preço (Menor para Maior)'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context);
+                viewModel.sortByPrice(ascending: false);
+              },
+              child: const Text('Preço (Maior para Menor)'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
